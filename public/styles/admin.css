@@ -1,0 +1,556 @@
+:root {
+  --main-color: #f4f4f4;
+  --black-color: #0e0e0e;
+  --border: 0.1rem solid rgba(255, 255, 255, 0.4);
+}
+
+* {
+  font-family: "poppins", sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  outline: none;
+  border: none;
+  text-decoration: none;
+  text-transform: capitalize;
+  transition: 0.2s ease;
+}
+
+/* base html codes*/
+html {
+  font-size: 62.5%;
+  overflow-x: hidden;
+  scroll-padding-top: 9rem;
+  scroll-behavior: smooth;
+}
+html::-webkit-scrollbar {
+  width: 0.8rem;
+  background-color: #fff;
+}
+html::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+html::-webkit-scrollbar-thumb {
+  border-radius: 3rem;
+  background-color: var(--black-color);
+}
+body {
+  background-color: var(--main-color);
+}
+section {
+  padding: 3.5rem 7%;
+}
+.section-title {
+  text-align: center;
+  color: #b51515;
+  margin-bottom: 2rem;
+}
+.heading {
+  color: var(--black-color);
+  text-transform: uppercase;
+  font-size: 4rem;
+  margin-bottom: 3.5rem;
+  border-bottom: 0.1rem solid #fff;
+}
+.heading span {
+  color: #ff0000;
+  text-transform: uppercase;
+}
+.btn {
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 30rem;
+  font-size: 1.2rem;
+  color: #fff;
+  background-color: var(--black-color);
+  cursor: pointer;
+}
+.btn:hover {
+  opacity: 0.9;
+}
+.active {
+  color: blue !important;
+}
+.alert-element {
+  display: flex;
+  justify-content: center;
+  z-index: 10000000;
+  position: relative;
+  top: -100px;
+  opacity: 0;
+  transition: top 0.5s ease-out, opacity 0.5s ease-out;
+}
+
+.alert-element.show {
+  top: 0;
+  opacity: 1;
+}
+
+.alert-element.hide {
+  top: -100px;
+  opacity: 0;
+  transition: top 1s ease-in, opacity 1s ease-in;
+}
+
+.alert-success {
+  z-index: 10000000;
+  padding: 1rem;
+  font-size: 1.3rem;
+  display: inline;
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+  margin-bottom: 1.5rem;
+  border-radius: 0.5rem;
+}
+/* admin nav start */
+.header-admin {
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 5%;
+  margin: 2rem 2rem;
+  border-radius: 30rem;
+  box-shadow: 0px 0px 17px -2px rgba(0, 0, 0, 0.75);
+  position: sticky;
+  top: 0;
+  z-index: 10000;
+}
+
+.header-admin a {
+  background: none;
+  font-size: 1.4rem;
+  color: var(--black-color);
+  font-weight: 500;
+}
+.header-admin a:hover {
+  color: blue;
+  cursor: pointer;
+}
+
+ul {
+  list-style-type: none;
+}
+.header-admin .nav-admin {
+width: 100%;
+height: 100%;
+padding: 2rem;
+}
+
+.header-admin .nav-admin ul {
+  display: flex;
+  justify-content: space-around;
+  text-align: center;
+}
+
+/* admin nav end */
+
+/* message start */
+.message-wrapper {
+  background-color: #fff;
+  padding: 1rem;
+  border-radius: 0.3rem;
+  margin: 1rem;
+}
+
+.message-list .message-wrapper {
+  display: flex;
+  gap: 1rem;
+}
+.message-right {
+  flex: 4;
+  display: flex;
+  flex-direction: column;
+}
+
+.message-right-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.message-right-bottom div {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.4rem;
+  align-items: center;
+}
+.message-left {
+  flex: 1;
+}
+
+.message-right .message-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+.message-right .message-buttons div {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+/* message end */
+
+/* adverts start */
+.adverts .box-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(30rem, 1fr));
+  gap: 1.5rem;
+}
+
+.adverts .box-container .box {
+  background-color: #fff;
+  border-radius: 3rem;
+  max-width: 30rem;
+  position: relative;
+  border: 1px solid black;
+}
+.adverts .box-container .box .image {
+  height: 25rem;
+  overflow: hidden;
+  width: 100%;
+  border-top-left-radius: 3rem;
+  border-top-right-radius: 3rem;
+}
+
+.adverts .box-container .box .image img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+.adverts .box-container .box:hover .image img {
+  transform: scale(1.2);
+}
+.adverts .box-container .box .content {
+  padding: 2rem;
+}
+.adverts .box-container .box .content .title {
+  font-size: 2.5rem;
+  line-height: 1.5rem;
+  color: var(--black-color);
+}
+.adverts .box-container .box .content span {
+  display: block;
+  padding-top: 1rem;
+  font-weight: 400;
+  font-size: 1.6rem;
+}
+.adverts .box-container .box .content p {
+  font-size: 1.6rem;
+  line-height: 1.8rem;
+  color: #868686;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.adverts .box-container .box .bottom {
+  display: flex;
+  justify-content: space-between;
+}
+
+.adverts .box-container .box .price {
+  color: rgb(128, 128, 192);
+  font-size: 1.5rem;
+  padding-top: 3.5rem;
+}
+.adverts .fa-solid {
+  color: #000000;
+  font-size: 1.7rem;
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  transition: ease-in-out 0.3s;
+}
+.adverts .fa-solid:hover {
+  color: rgb(241, 85, 85);
+  font-size: 2.5rem;
+}
+
+/* adverts end */
+
+/* users start */
+.allUsers .userContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.allUsers .userContainer .user:hover {
+  opacity: 1;
+}
+.allUsers span {
+  font-size: 1.3rem;
+  font-weight: 500;
+}
+.allUsers .user {
+  opacity: 0.7;
+  border-radius: 0.5rem;
+  padding: 0 1rem;
+  background-color: #fff;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  transition: 0.2 all ease;
+}
+.allUsers img {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+}
+.allUsers .user-left {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 1rem;
+  width: 20rem;
+}
+.allUsers .user-middle {
+  font-size: 1.3rem;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.user-right {
+  display: flex;
+  align-items: center;
+  font-size: 1.2rem;
+}
+.user-right .buttons {
+  display: flex;
+  gap: 1rem;
+}
+.user-right a {
+  border: var(--border);
+  color: #fff;
+  padding: 0.5rem;
+  background-color: #155724;
+  border-radius: 0.5rem;
+  transition: ease 0.5s;
+}
+.user-right .delete {
+  background-color: rgb(241, 85, 85);
+}
+.user-right a:hover {
+  opacity: 0.7;
+}
+.update-user {
+  background-color: #f0f0f0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.update-user .container {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 300px;
+}
+
+.update-user h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.update-user .form-group {
+  margin-bottom: 15px;
+}
+
+.update-user label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.update-user input,
+.update-user select {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.update-user button {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.update-user button:hover {
+  background-color: #0056b3;
+}
+
+/* reservation start */
+.reservation-wrapper .container {
+  max-width: 80rem;
+  margin: 0 auto;
+  background-color: #fff;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.reservation-wrapper h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.reservation-wrapper .vehicle-card {
+  display: flex;
+  border: 1px solid #ddd;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.reservation-wrapper .vehicle-image {
+  width: 20rem;
+  height: 20rem;
+  object-fit: cover;
+}
+
+.reservation-wrapper .car-details {
+  padding: 2rem;
+  width: 100%;
+}
+
+.reservation-wrapper .car-details h2 {
+  color: #333;
+}
+
+.reservation-wrapper .car-details p {
+  font-size: 1.3rem;
+  margin-bottom: 5px;
+  color: #555;
+}
+.reservation-wrapper .car-details .details-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.reservation-wrapper .car-details p a {
+  padding: 0.3rem;
+  color: #fff;
+  background-color: #155724;
+  border-radius: 0.2rem;
+}
+
+.reservation-wrapper .actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+}
+
+.reservation-wrapper .btn-update,
+.reservation-wrapper .btn-delete {
+  display: inline-block;
+  padding: 10px 15px;
+  text-decoration: none;
+  color: #fff;
+  border-radius: 5px;
+  margin-right: 10px;
+  font-size: 1.2rem;
+  transition: background-color 0.3s;
+}
+
+.reservation-wrapper .btn-update {
+  background-color: #28a745;
+}
+
+.reservation-wrapper .btn-update:hover {
+  background-color: #218838;
+}
+
+.reservation-wrapper .btn-delete {
+  background-color: #dc3545;
+}
+
+.reservation-wrapper .btn-delete:hover {
+  background-color: #c82333;
+}
+/* reservation end */
+
+/* users end */
+.about .row {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 2rem;
+}
+
+.about .row .image {
+  width: 55rem;
+  height: 50rem;
+  flex: 1 1 45rem;
+}
+.about .row .image img {
+  width: 55rem;
+  height: 50rem;
+  object-fit: cover;
+}
+.about .row .content {
+  flex: 1 1 45rem;
+}
+.about .row .content span {
+  font-weight: 700;
+}
+.about .row .content .detailsBtn {
+  color: #ff3a3a;
+  padding: 0 1.5rem;
+  font-weight: 400;
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.about .row .content .detailsBtn:hover {
+  box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24),
+    0 17px 50px 0 rgba(0, 0, 0, 0.19);
+}
+.about .row .content h3 {
+  border-bottom: 1px solid blanchedalmond;
+  font-size: 3rem;
+  color: var(--black-color);
+}
+.about .row .content p {
+  border-bottom: 1px solid blanchedalmond;
+  font-size: 1.6rem;
+  color: #291c1c;
+  padding: 1rem 0;
+  line-height: 1.8;
+  display: flex;
+  justify-content: space-between;
+}
+.about .row .content .details {
+  color: #ff3a3a;
+  font-weight: 400;
+}
+
+.about .row .content form {
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+}
+.about .row .content form label {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+.about .row .content .update-date {
+  display: inline-block !important;
+  color: #f4f4f4;
+  margin-top: 1rem;
+  padding: 0.5rem;
+  background-color: #155724;
+  border-radius: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.about .row .content .update-date:hover {
+  background-color: #218838;
+}

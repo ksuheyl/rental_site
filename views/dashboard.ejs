@@ -1,0 +1,223 @@
+<html>
+  <%- include('partials/_header') %>
+  <body>
+    <!-- header section star -->
+    <%- include('partials/_menu') %>
+    <!-- header section end -->
+
+    <section class="dashboard">
+      <div class="box-container">
+        <div class="box">
+          <div class="dashboard-top">
+            <button
+              data-toggle="modal"
+              data-target=".bd-example-modal-lg"
+              type="button"
+              class="btn"
+              id="addAdvert"
+              style="margin: 0"
+            >
+              Add New Vehicle
+            </button>
+            <img class="user" src="<%= user.avatar %>" alt="user" />
+            <h3><%= user.username %></h3>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="addCntr" class="addSection">
+      <div class="add-container">
+        <form
+          id="request"
+          class="main_form"
+          method="POST"
+          action="/advert"
+          enctype="multipart/form-data"
+        >
+          <div class="form-group">
+            <label for="name">Advert title</label>
+            <input
+              placeholder="Advert title"
+              type="text"
+              id="name"
+              name="name"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="address">Address</label>
+            <div class="selectAddress">
+              <select name="city" id="city" required>
+                <option value="">Select City</option>
+              </select>
+              <select name="district" id="district" required>
+                <option value="">Select District</option>
+              </select>
+            </div>
+            <input
+              placeholder="Address description"
+              type="text"
+              id="street"
+              name="adress"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="vehicle_type">Vehicle type</label>
+            <select id="vehicle_type" name="vehicle_type" required>
+              <option value="Car">Car</option>
+              <option value="Scooter">Scooter</option>
+              <option value="Bicycle">Bicycle</option>
+              <option value="Motorcycle">Motorcycle</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="description">Advert description</label>
+            <textarea
+              placeholder="Advert description"
+              id="description"
+              name="description"
+              rows="4"
+              required
+            ></textarea>
+          </div>
+          <div class="form-group">
+            <label for="price">Price</label>
+            <input
+              placeholder="Advert price"
+              type="number"
+              id="price"
+              name="price"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="image"></label>
+            <input
+              type="file"
+              id="image"
+              name="image"
+              accept="image/*"
+              required
+            />
+          </div>
+          <button
+            style="background-color: black; color: white"
+            class="btn"
+            type="submit"
+          >
+            Add deal
+          </button>
+          <a class="exit" href=""><i class="fa-solid fa-circle-xmark"></i></a>
+        </form>
+      </div>
+      <div id="addS-cover"></div>
+    </section>
+    <section class="adverts">
+      <h1 class="heading">my <span>rental vehicle</span></h1>
+      <div class="box-container">
+        <% for( advert of adverts ) { %>
+        <div class="box">
+          <div class="image">
+            <img src="<%=advert.url%>" alt="" />
+          </div>
+          <div class="content">
+            <a class="title" href="/advert/<%=advert._id%>"
+              ><%= advert.name %></a
+            >
+            <span><%= advert.uploadedAt.toDateString() %></span>
+            <p><%= advert.description.substring(0,80)+"..." %></p>
+            <div class="bottom">
+              <a href="/advert/<%=advert._id%>" class="btn">Details</a>
+              <div class="price">Price <%=advert.price%>$</div>
+            </div>
+            <a
+              href="/advert/delete/<%=advert._id%>?_method=DELETE"
+              class="fa-solid fa-trash"
+              onclick="return confirm('Do you want to delete your advert')"
+            ></a>
+          </div>
+        </div>
+        <% } %>
+      </div>
+    </section>
+
+    <!-- footer star -->
+    <%- include('partials/_footer') %>
+    <!-- footer end -->
+
+    <script>
+      let addressData;
+
+      fetch("/AddressData")
+        .then((response) => response.json())
+        .then((data) => {
+          addressData = data;
+          const citySelect = document.getElementById("city");
+          addressData.data.forEach((city) => {
+            const option = document.createElement("option");
+            option.value = city.il_adi;
+            option.textContent = city.il_adi;
+            citySelect.appendChild(option);
+          });
+        })
+        .catch((error) => {
+          console.error("Error fetching address data:", error);
+        });
+
+      document.getElementById("city").addEventListener("change", function () {
+        const city = this.value;
+        const selectedCity = addressData.data.find(
+          (item) => item.il_adi === city
+        );
+        populateDistricts(selectedCity.ilceler);
+        updateAddress();
+      });
+
+      document
+        .getElementById("district")
+        .addEventListener("change", function () {
+          updateAddress();
+        });
+
+      function populateDistricts(districts) {
+        const districtSelect = document.getElementById("district");
+        districtSelect.innerHTML = '<option value="">Select District</option>';
+        districts.forEach((district) => {
+          const option = document.createElement("option");
+          option.value = district.ilce_adi;
+          option.textContent = district.ilce_adi;
+          districtSelect.appendChild(option);
+        });
+      }
+
+      function updateAddress() {
+        const city = document.getElementById("city").value;
+        const district = document.getElementById("district").value;
+        const street = document.getElementById("street");
+        street.value = city + "/" + district;
+      }
+    </script>
+
+    <script>
+      const addBtn = document.getElementById("addAdvert");
+      const addForm = document.getElementById("addCntr");
+      const overlay = document.getElementById("addS-cover");
+
+      addBtn.addEventListener("click", function () {
+        addForm.classList.toggle("active-d");
+        overlay.classList.toggle("active-d");
+        document.addEventListener("click", function (e) {
+          if (
+            !e.composedPath().includes(addBtn) &&
+            !e.composedPath().includes(addForm)
+          ) {
+            addForm.classList.remove("active-d");
+            overlay.classList.remove("active-d");
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,67 @@
+<html>
+  <%- include('partials/_header') %>
+  <body>
+    <!-- header section star -->
+    <%- include('partials/_menu') %>
+
+    <!-- header section end -->
+    <!-- contact us star -->
+    <section class="contact">
+      <% if (message) { %>
+      <div id="success" class="alert-element">
+        <div class="alert-success"><%= message %></div>
+      </div>
+      <% } %>
+      <h1 class="heading">contact <span>us</span></h1>
+      <div class="row">
+        <iframe
+          class="map"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3161.6118298747247!2d36.805296176406515!3d37.587757222910064!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x152dda23eca83b39%3A0x41ea923e9ce063a0!2zS1PDnCBNw7xoZW5kaXNsaWsgdmUgTWltYXJsxLFrIEZha8O8bHRlc2k!5e0!3m2!1str!2str!4v1709506191242!5m2!1str!2str"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+        ></iframe>
+        <form method="POST" action="/users/contact">
+          <br />
+          <h3>GET IN TOUCH</h3>
+          <div class="inputBox">
+            <i class="fas fa-user"></i>
+            <input name="name" required type="text" placeholder="Name" />
+          </div>
+          <div class="inputBox">
+            <i class="fas fa-envelope"></i>
+            <input name="email" required type="email" placeholder="Email" />
+          </div>
+          <div class="inputBox">
+            <i class="fas fa-phone"></i>
+            <input name="phoneNumber" type="number" placeholder="Phone" />
+          </div>
+          <div class="inputBox">
+            <i class="fa-solid fa-message"></i>
+            <textarea
+              placeholder="Massage"
+              name="massage"
+              id="contact-dsc"
+              rows="5"
+            ></textarea>
+          </div>
+          <input type="submit" class="btn" value="Contact Now" />
+        </form>
+      </div>
+    </section>
+    <!-- contact us end -->
+
+    <!-- footer star -->
+    <%- include('partials/_footer') %>
+    <!-- footer end -->
+  </body>
+  <script>
+    window.onload = function () {
+      const successDiv = document.getElementById("success");
+      successDiv.classList.add("show");
+
+      setTimeout(() => {
+        successDiv.classList.add("hide");
+      }, 3000);
+    };
+  </script>
+</html>

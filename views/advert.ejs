@@ -1,0 +1,39 @@
+<html>
+  <%- include('partials/_header') %>
+  <body>
+    <!-- header section star -->
+
+    <%- include('partials/_menu') %>
+
+    <!-- header section end -->
+
+    <!-- adverts start -->
+    <section class="adverts">
+      <h1 class="heading">our <span>rental vehicle</span></h1>
+      <div class="box-container">
+        <% for( advert of adverts ) { %>
+        <div class="box">
+          <div class="image">
+            <img src="<%=advert.url%>" alt="" />
+          </div>
+          <div class="content">
+            <a class="title" href="/advert/<%=advert._id%>"
+              ><%= advert.name.substring(0,20) %></a
+            >
+            <span><%= advert.uploadedAt.toDateString() %></span>
+            <p><%= advert.description.substring(0,15)+"..." %></p>
+            <div class="bottom">
+              <a href="/advert/<%=advert._id%>" class="btn">Details</a>
+              <div class="price">Daily Price <%=advert.price%>$</div>
+            </div>
+          </div>
+        </div>
+        <% } %>
+      </div>
+    </section>
+    <!-- adverts end -->
+    <!-- footer star -->
+    <%- include('partials/_footer') %>
+    <!-- footer end -->
+  </body>
+</html>

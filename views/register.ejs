@@ -1,0 +1,113 @@
+<html>
+  <%- include('partials/_header') %>
+  <body>
+    <!-- header section star -->
+    <%- include('partials/_menu') %>
+    <!-- header section end -->
+
+    <!-- contact us star -->
+    <section class="contact">
+      <h1 class="heading">sing <span>in</span></h1>
+      <div class="row">
+        <form
+          id="request"
+          class="main_form"
+          action="users/register"
+          method="POST"
+        >
+          <h3>Register</h3>
+          <div class="inputBox">
+            <i class="fas fa-user"></i>
+            <input
+              type="text"
+              placeholder="Username"
+              name="username"
+              required
+            />
+          </div>
+          <div id="username" style="display: none" class="alert-section">
+            <div class="alert"></div>
+          </div>
+          <div class="inputBox">
+            <i class="fas fa-envelope"></i>
+            <input type="email" placeholder="Email" name="email" required />
+          </div>
+          <div id="email" style="display: none" class="alert-section">
+            <div class="alert"></div>
+          </div>
+          <div class="inputBox">
+            <i class="fa-solid fa-lock"></i>
+            <input
+              type="password"
+              placeholder="Password"
+              name="password"
+              required
+            />
+          </div>
+          <div id="password" style="display: none" class="alert-section">
+            <div class="alert"></div>
+          </div>
+          <button class="btn">Register</button>
+        </form>
+      </div>
+    </section>
+    <!-- contact us end -->
+
+    <!-- footer star -->
+    <%- include('partials/_footer') %>
+    <!-- footer end -->
+
+    <script>
+      const form = document.querySelector("#request");
+      const emailError = document.querySelector("#email");
+      const passwordError = document.querySelector("#password");
+      const usernameError = document.querySelector("#username");
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        emailError.textContent = "";
+        passwordError.textContent = "";
+        usernameError.textContent = "";
+        emailError.style.display = "none";
+        passwordError.style.display = "none";
+        usernameError.style.display = "none";
+
+        const email = form.email.value;
+        const password = form.password.value;
+        const username = form.username.value;
+
+        try {
+          const res = await fetch("users/register", {
+            method: "POST",
+            body: JSON.stringify({ email, password, username }),
+            headers: { "Content-Type": "application/json" },
+          });
+
+          const data = await res.json();
+
+          if (res.ok) {
+            location.assign("/login");
+          } else {
+            if (data.email) {
+              emailError.textContent = data.email;
+              emailError.style.display = "block";
+            }
+
+            if (data.password) {
+              passwordError.textContent = data.password;
+              passwordError.style.display = "block";
+            }
+
+            if (data.username) {
+              usernameError.textContent = data.username;
+              usernameError.style.display = "block";
+            }
+          }
+        } catch (err) {
+          console.log("ERR::", err);
+        }
+      });
+    </script>
+  </body>
+</html>

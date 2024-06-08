@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('partials/_header') %>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+    <script
+      async
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  </head>
+  <body>
+    <!-- header section start -->
+    <%- include('partials/_menu') %>
+    <!-- header section end -->
+
+    <!-- details start -->
+    <section class="about">
+      <h1 class="heading"><span>the </span>advert</h1>
+      <div class="row">
+        <div class="image">
+          <img src="<%=details.url%>" alt="about" />
+        </div>
+        <div class="content">
+          <h3><%= details.name %></h3>
+          <p>
+            <span> Vehicle:</span>
+            <span class="details"><%= details.vehicle_type %></span>
+          </p>
+          <p>
+            <span> User: </span>
+            <a class="detailsBtn" href="/users/user/<%= details.user._id %>">
+              <%= details.user.username %>
+            </a>
+          </p>
+          <p>
+            <span> Details:</span>
+            <span class="details"><%= details.description %></span>
+          </p>
+          <p>
+            <span> Address:</span>
+            <span class="details"><%=details.adress%></span>
+          </p>
+          <p>
+            <span>Daily Price:</span>
+            <span class="details"><%= details.price %>$</span>
+          </p>
+          <p>
+            <span> Date:</span>
+            <span class="details"
+              ><%= details.uploadedAt.toDateString() %></span
+            >
+          </p>
+          <form id="reservationForm" method="POST" action="/advert/reservation">
+            <label for="advertId"></label>
+            <input
+              type="hidden"
+              id="advertId"
+              name="advertId"
+              value="<%= details._id %>"
+              required
+            />
+            <label for="ownerId"></label>
+            <input
+              type="hidden"
+              id="ownerId"
+              name="ownerId"
+              value="<%= details.user._id %>"
+              required
+            />
+            <label for="startingDate">Starting Date</label>
+            <input
+              type="datetime-local"
+              id="startingDate"
+              name="startingDate"
+              required
+            />
+            <label for="endDate">End Date</label>
+            <input type="datetime-local" id="endDate" name="endDate" required />
+            <label for="paymentStatus"></label>
+            <input
+              type="hidden"
+              id="paymentStatus"
+              name="paymentStatus"
+              value="true"
+              required
+            />
+            <input
+              type="hidden"
+              id="price"
+              name="price"
+              value="<%=details.price%>"
+              required
+            />
+            <button class="btn" type="submit">Rent Now</button>
+          </form>
+        </div>
+      </div>
+      <div class="details-map">
+        <h2>Location</h2>
+        <div style="height: 20rem" id="map">
+          <input id="mapCoordinate" type="hidden" value="<%=details.adress%>" />
+        </div>
+      </div>
+    </section>
+    <!--  details end -->
+
+    <!-- review section start -->
+    <section class="review">
+      <h1 class="heading">customer's <span>review</span></h1>
+      <form
+        id="commentForm"
+        class="container"
+        method="POST"
+        action="/advert/comment"
+      >
+        <textarea
+          placeholder="comment here"
+          id="comment"
+          name="comment"
+          rows="4"
+          cols="50"
+          required
+        ></textarea>
+        <div class="comment-button">
+          <div class="stars">
+            <input required type="radio" id="star1" name="rating" value="5" />
+            <label for="star1"><i class="fas fa-star"></i></label>
+            <input required type="radio" id="star2" name="rating" value="4" />
+            <label for="star2"><i class="fas fa-star"></i></label>
+            <input required type="radio" id="star3" name="rating" value="3" />
+            <label for="star3"><i class="fas fa-star"></i></label>
+            <input required type="radio" id="star4" name="rating" value="2" />
+            <label for="star4"><i class="fas fa-star"></i></label>
+            <input required type="radio" id="star5" name="rating" value="1" />
+            <label for="star5"><i class="fas fa-star"></i></label>
+            <input name="advertID" type="hidden" value="<%= details._id %>" />
+          </div>
+          <button type="submit" class="btn comment-btn">Send</button>
+        </div>
+      </form>
+      <div class="box-container">
+        <% for( let comment of comments ) { %>
+        <div class="box">
+          <div class="review-top">
+            <img class="user" src="<%= comment.user.avatar%>" alt="user" />
+            <strong> <%= comment.uploadedAt.toDateString() %> </strong>
+            <h3><%= comment.user.username %></h3>
+            <div class="stars">
+              <% for(let i = 0; i < comment.rating; i++ ) { %>
+              <i class="fas fa-star"></i>
+              <% } %>
+            </div>
+          </div>
+          <div class="review-bottom">
+            <p><%= comment.comment %></p>
+          </div>
+        </div>
+        <% } %>
+      </div>
+    </section>
+    <!-- review section end -->
+
+    <p id="startingDate_" style="display: none"><%= startingDate %></p>
+    <p id="endDate_" style="display: none"><%= endDate %></p>
+
+    <!-- footer start -->
+    <%- include('partials/_footer') %>
+    <!-- footer end -->
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const startingDateString = document
+          .getElementById("startingDate_")
+          .textContent.trim();
+        const startingDate = startingDateString.split(",");
+
+        const endDateString = document
+          .getElementById("endDate_")
+          .textContent.trim();
+        const endDate = endDateString.split(",");
+
+        var disableDate = [];
+        var existingReservations = [];
+
+        for (let i = 0; i < startingDate.length; i++) {
+          const start = new Date(startingDate[i]);
+          const end = new Date(endDate[i]);
+          start.setDate(start.getDate() + 1);
+          end.setDate(end.getDate() + 1);
+
+          const disabledRange = [];
+
+          for (
+            let dt = new Date(start);
+            dt <= end;
+            dt.setDate(dt.getDate() + 1)
+          ) {
+            var formattedDate = dt.toISOString().split("T")[0];
+            disabledRange.push(formattedDate);
+          }
+
+          disableDate = disableDate.concat(disabledRange);
+          existingReservations.push({ start: start, end: end });
+        }
+
+        var minDate = new Date();
+
+        function checkConflicts(selectedStart, selectedEnd) {
+          for (let reservation of existingReservations) {
+            if (
+              (selectedEnd >= reservation.start &&
+                selectedEnd <= reservation.end) ||
+              (selectedStart <= reservation.start &&
+                selectedEnd >= reservation.end)
+            ) {
+              return true;
+            }
+          }
+          return false;
+        }
+
+        flatpickr("#startingDate", {
+          disable: disableDate,
+          dateFormat: "Y-m-d H:i",
+          minDate: minDate,
+          onChange: function (selectedDates, dateStr, instance) {
+            var selectedEnd = flatpickr.parseDate(
+              document.getElementById("endDate").value,
+              "Y-m-d H:i"
+            );
+            if (selectedDates.length && selectedEnd) {
+              if (checkConflicts(selectedDates[0], selectedEnd)) {
+                alert(
+                  "The dates you selected conflict with existing reservations. Please choose different dates"
+                );
+                instance.clear();
+              }
+            }
+          },
+        });
+
+        flatpickr("#endDate", {
+          disable: disableDate,
+          dateFormat: "Y-m-d H:i",
+          minDate: minDate,
+          onChange: function (selectedDates, dateStr, instance) {
+            var selectedStart = flatpickr.parseDate(
+              document.getElementById("startingDate").value,
+              "Y-m-d H:i"
+            );
+            if (selectedDates.length && selectedStart) {
+              if (checkConflicts(selectedStart, selectedDates[0])) {
+                alert(
+                  "The dates you selected conflict with existing reservations. Please choose different dates"
+                );
+                instance.clear();
+              }
+            }
+          },
+        });
+      });
+    </script>
+
+    <script>
+      var address = document.getElementById("mapCoordinate").value;
+      var url =
+        "https://nominatim.openstreetmap.org/search?q=" +
+        encodeURIComponent(address) +
+        "&format=json";
+
+      fetch(url)
+        .then((response) => response.json())
+        .then((data) => {
+          var latitude = data[0].lat;
+          var longitude = data[0].lon;
+
+          var map = L.map("map").setView([latitude, longitude], 13);
+          var googleBaseMap = L.tileLayer(
+            "http://{s}.google.com/vt?lyrs=m&x={x}&y={y}&z={z}",
+            {
+              maxZoom: 20,
+              subdomains: ["mt0", "mt1", "mt2", "mt3"],
+            }
+          );
+          googleBaseMap.addTo(map);
+          var marker = L.marker([latitude, longitude]).addTo(map);
+        })
+        .catch((error) => console.error("Error:", error));
+    </script>
+  </body>
+</html>

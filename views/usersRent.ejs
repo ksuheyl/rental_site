@@ -1,0 +1,44 @@
+<html>
+  <%- include('partials/_header') %>
+  <body>
+    <!-- header section start -->
+    <%- include('partials/_menu') %>
+    <!-- header section end -->
+
+    <section class="reservation-wrapper">
+      <div class="container">
+        <h1>Vehicles You Rent</h1>
+        <% for(let i = 0; i < reservations.length; i++ ) { %>
+        <div class="car-card">
+          <img src="<%= adverts[i][0].url %>" alt="img" class="car-image" />
+          <div class="car-details">
+            <p><b>Name:</b>&nbsp;<%= adverts[i][0].name %></p>
+            <p>
+              <strong>Rental Date:</strong> <%=
+              reservations[i].startingDate.toDateString() %>
+            </p>
+            <p>
+              <strong>Lease End Date:</strong> <%=
+              reservations[i].endDate.toDateString() %>
+            </p>
+            <p>
+              <b>Total Money You Will Receive:</b>&nbsp;<%=reservations[i].price
+              %>$
+            </p>
+            <div class="actions">
+              <a
+                class="btn-1 btn-primary"
+                href="/advert/<%=reservations[i].advertId %>"
+                >Go to Vehicle</a
+              >
+            </div>
+          </div>
+        </div>
+        <% } %>
+      </div>
+    </section>
+    <!-- footer start -->
+    <%- include('partials/_footer') %>
+    <!-- footer end -->
+  </body>
+</html>

@@ -1,0 +1,41 @@
+<html>
+  <%- include('./adminPartials/adminHeader.ejs') %>
+  <body>
+    <section class="allUsers">
+      <h1 class="section-title">all users</h1>
+      <div class="userContainer">
+        <% for (user of users) { %>
+        <div class="user">
+          <div class="user-left">
+            <span><%=count+=1; %></span>
+            <img src="<%=user.avatar  %>" alt="" />
+            <div>
+              <h3><%= user.username %></h3>
+              <h3><%= user.email %></h3>
+            </div>
+          </div>
+          <div class="user-middle">
+            <p><b>Role:</b>&nbsp;<%= user.role %></p>
+            <p>
+              <b>Created at:</b>&nbsp;<%=
+              user.createdAt.toLocaleDateString("en-US", { day: "numeric", year:
+              "numeric", month: "long"}); %>
+            </p>
+          </div>
+          <div class="user-right">
+            <div class="buttons">
+              <a class="update" href="/admin/updateUser/<%= user._id %>">Update</a>
+              <a
+                class="delete"
+                href="/admin/users/<%=user._id%>?_method=DELETE"
+                onclick="return confirm('Do you want to delete <%=user.username %> user')"
+                >Delete</a
+              >
+            </div>
+          </div>
+        </div>
+        <% } %>
+      </div>
+    </section>
+  </body>
+</html>

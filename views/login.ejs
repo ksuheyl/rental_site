@@ -1,0 +1,92 @@
+<html>
+  <%- include('partials/_header') %>
+  <body>
+    <!-- header section star -->
+    <%- include('partials/_menu') %>
+    <!-- header section end -->
+    <!-- contact us star -->
+    <section class="contact">
+      <h1 class="heading">log <span>in</span></h1>
+      <div class="row">
+        <form id="request" action="users/login" method="POST">
+          <div id="username-error" style="display: none" class="alert-section">
+            <div class="alert"></div>
+          </div>
+          <div id="password-error" style="display: none" class="alert-section">
+            <div class="alert"></div>
+          </div>
+          <h3>Login</h3>
+          <div class="inputBox">
+            <i class="fas fa-user"></i>
+            <input
+              id="username"
+              type="text"
+              placeholder="Username"
+              name="username"
+              required
+            />
+          </div>
+          <div class="inputBox">
+            <i class="fa-solid fa-lock"></i>
+            <input
+              id="password"
+              type="password"
+              placeholder="Password"
+              name="password"
+              required
+            />
+          </div>
+          <button class="btn">Login</button>
+        </form>
+      </div>
+    </section>
+    <!-- contact us end -->
+
+    <!-- footer star -->
+    <%- include('partials/_footer') %>
+    <!-- footer end -->
+
+    <script>
+      const form = document.querySelector("#request");
+      const usernameError = document.querySelector("#username-error .alert");
+      const passwordError = document.querySelector("#password-error .alert");
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        usernameError.textContent = "";
+        usernameError.parentElement.style.display = "none";
+        passwordError.textContent = "";
+        passwordError.parentElement.style.display = "none";
+
+        const username = form.username.value;
+        const password = form.password.value;
+
+        try {
+          const res = await fetch("users/login", {
+            method: "POST",
+            body: JSON.stringify({ username, password }),
+            headers: { "Content-Type": "application/json" },
+          });
+
+          const data = await res.json();
+          if (data) {
+            if (data.error) {
+              if (data.error.toLowerCase().includes("username")) {
+                usernameError.textContent = data.error;
+                usernameError.parentElement.style.display = "block";
+              } else if (data.error.toLowerCase().includes("password")) {
+                passwordError.textContent = data.error;
+                passwordError.parentElement.style.display = "block";
+              }
+            }
+            if (data.user) {
+              location.assign("/users/dashboard");
+            }
+          }
+        } catch (err) {
+          console.log("ERR::", err);
+        }
+      });
+    </script>
+  </body>
+</html>

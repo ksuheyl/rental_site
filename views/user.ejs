@@ -1,0 +1,43 @@
+<%- include('partials/_header') %>
+<body>
+  <!-- header section star -->
+  <%- include('partials/_menu') %>
+  <!-- header section end -->
+
+  <section class="dashboard">
+    <div class="box-container">
+      <div class="box">
+        <div class="dashboard-top">
+          <img class="user" src="/images/avatar-1.png" alt="user" />
+          <h3><%= user.username %></h3>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="adverts">
+    <h1 class="heading"><%= user.username %> <span>adverts</span></h1>
+    <div class="box-container">
+      <% for( advert of adverts ) { %>               
+      <div class="box">
+        <div class="image">
+          <img src="<%=advert.url%>" alt="" />
+        </div>
+        <div class="content">
+          <a class="title" href="/advert/<%=advert._id%>"><%= advert.name %></a>
+          <span><%= advert.uploadedAt.toDateString() %></span>
+          <p> <%= advert.description.substring(0,80)+"..." %></p>
+          <div class="bottom">
+           <a href="/advert/<%=advert._id%>" class="btn">Details</a>
+            <div class="price">Price <%=advert.price%>$</div>
+          </div>                     
+        </div>
+      </div>
+      <% } %>
+    </div>
+  </section>
+
+  <!-- footer star -->
+  <%- include('partials/_footer') %>
+  <!-- footer end -->
+</body>
+</html>

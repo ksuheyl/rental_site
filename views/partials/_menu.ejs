@@ -1,0 +1,65 @@
+<header class="header">
+  <a class="logo" href="/">
+    <img src="/images/logo.png" alt="logo" />
+  </a>
+  <nav class="navbar main-nav">
+    <a href="/" class="<%= link=== 'index' && 'active'%>">Home</a>
+    <a href="/advert" class="<%= link=== 'adverts' && 'active'%>"
+      >RentVehicle</a
+    >
+    <a href="/contact" class="<%= link=== 'contact' && 'active'%>">Contact</a>
+    <a href="/maps" class="<%= link=== 'maps' && 'active'%>">Maps</a>
+    <%if(user){%> <% if (user.role === 'admin') { %>
+    <a href="/admin" class="<%= link === 'admin' ? 'active' : '' %>"
+      >AdminPage</a
+    >
+    <% } %> <%}%>
+  </nav>
+  <div class="buttons">
+    <button id="search-btn"><i class="fas fa-search"></i></button>
+    <%if(!user){%>
+    <button id="cart-btn"><i class="fas fa-user"></i></button>
+    <%} else{%>
+    <img class="user-img" id="cart-btn" src="<%= user.avatar %>" alt="" />
+    <%}%>
+    <button id="menu-btn"><i class="fas fa-bars"></i></button>
+  </div>
+  <form class="search-form" action="/advert/search" method="GET">
+    <input
+      name="look"
+      type="text"
+      class="search-input"
+      id="search-box"
+      placeholder="search here"
+    />
+    <button style="background-color: transparent; border: none" type="submit">
+      <i class="fas fa-search"></i>
+    </button>
+  </form>
+  <div class="cart-items-container">
+    <nav class="navbar">
+      <% if (user){%>
+
+      <a href="/users/dashboard" class="<%= link=== 'dashboard' && 'active'%>"
+        >Dashboard</a
+      >
+      <a
+        href="/users/reservation"
+        class="<%= link=== 'reservation' && 'active'%>"
+        >MyReservations</a
+      >
+      <a
+        href="/users/rented"
+        class="<%= link=== 'usersRent' && 'active'%>"
+        >Rented Vehicles</a
+      >
+      <a href="/logout">Logout</a>
+      <%}else{%>
+      <a href="/register" class="<%= link=== 'register' && 'active'%>"
+        >Register</a
+      >
+      <a href="/login" class="<%= link=== 'login' && 'active'%>">Login</a>
+      <% } %>
+    </nav>
+  </div>
+</header>

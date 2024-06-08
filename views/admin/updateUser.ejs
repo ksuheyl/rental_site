@@ -1,0 +1,64 @@
+<html>
+  <%- include('./adminPartials/adminHeader.ejs') %>
+  <body>
+    <% if (message) { %>
+    <div id="success" class="alert-element">
+      <div class="alert-success"><%= message %></div>
+    </div>
+    <% } %>
+    <section class="update-user">
+      <div class="container">
+        <h2>Update User Information</h2>
+        <form
+          id="updateUserForm"
+          method="POST"
+          action="/admin/updateUser/<%=user._id%>?_method=PUT"
+        >
+          <div class="form-group">
+            <label for="username">Username:</label>
+            <input
+              value="<%= user.username %>"
+              type="text"
+              id="username"
+              name="username"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="email">Email:</label>
+            <input
+              value="<%= user.email %>"
+              type="email"
+              id="email"
+              name="email"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="role">Role:</label>
+            <select id="role" name="role">
+              <% if (user.role === "admin") { %>
+              <option value="admin">Admin</option>
+              <option value="user">User</option>
+              <% } else { %>
+              <option value="user">User</option>
+              <option value="admin">Admin</option>
+              <% } %>
+            </select>
+          </div>
+          <button type="submit">Update</button>
+        </form>
+      </div>
+    </section>
+  </body>
+  <script>
+    window.onload = function () {
+      const successDiv = document.getElementById("success");
+      successDiv.classList.add("show");
+
+      setTimeout(() => {
+        successDiv.classList.add("hide");
+      }, 3000);
+    };
+  </script>
+</html>

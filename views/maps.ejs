@@ -1,0 +1,93 @@
+<%- include('partials/_header') %>
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+  crossorigin=""
+/>
+<script
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+  crossorigin=""
+></script>
+<body>
+  <div id="mapAll">
+    <input
+      class="btn btn-exit"
+      action="action"
+      onclick="window.history.go(-1); return false;"
+      type="submit"
+      value="Cancel"
+    />
+  </div>
+</body>
+<script>
+  // URL to fetch the data
+  const fetchUrl = "maps/details";
+
+  // Initialize the map
+  var map = L.map("mapAll").setView([37.577, 36.923], 15);
+  var googleBaseMap = L.tileLayer(
+    "http://{s}.google.com/vt?lyrs=m&x={x}&y={y}&z={z}",
+    {
+      subdomains: ["mt0", "mt1", "mt2", "mt3"],
+      maxZoom: 15,
+    }
+  ).addTo(map);
+
+  // Function to fetch advert data
+  async function fetchAdvertData() {
+    try {
+      const response = await fetch(fetchUrl);
+      const data = await response.json();
+      return data.adverts;
+    } catch (error) {
+      console.error("Error in fetching advert data: ", error);
+      return [];
+    }
+  }
+
+  // Function to fetch geocode data
+  async function fetchGeocode(address) {
+    const geocodeUrl =
+      "https://nominatim.openstreetmap.org/search?q=" +
+      encodeURIComponent(address) +
+      "&format=json";
+    try {
+      const response = await fetch(geocodeUrl);
+      const data = await response.json();
+      return data.length > 0 ? data[0] : null;
+    } catch (error) {
+      console.error("Error in geocoding: ", error);
+      return null;
+    }
+  }
+
+  // Main function to initialize the map with markers
+  async function initializeMap() {
+    const advertData = await fetchAdvertData();
+    for (const item of advertData) {
+      const address = item.adress;
+      const price = item.price;
+      const vehicleType = item.vehicle_type;
+      const advertId = item._id;
+
+      const locationData = await fetchGeocode(address);
+      if (locationData) {
+        var marker = L.marker([locationData.lat, locationData.lon])
+          .addTo(map)
+          .bindPopup(
+            `<div style="font-size: 12px;">
+            price: ${price}<br>
+            Type: ${vehicleType}<br>
+            <a href='/advert/${advertId}'>Go to advert</a>
+          </div>`
+          );
+      } else {
+        console.error("No location data found for address: " + address);
+      }
+    }
+  }
+
+  initializeMap();
+</script>
